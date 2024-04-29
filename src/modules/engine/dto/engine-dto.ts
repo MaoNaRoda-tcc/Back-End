@@ -1,4 +1,4 @@
-import { IsNumber, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsNumber, IsString, MaxLength, Min, MinLength } from 'class-validator';
 
 export class EngineDto {
   @IsString()
@@ -7,6 +7,7 @@ export class EngineDto {
   name: string;
 
   @IsNumber()
+  @Min(1)
   displacement: number;
 
   @IsNumber()
