@@ -8,11 +8,22 @@ datasource db {
 }
 
 model Engine {
-  id           Int    @id @default(autoincrement())
-  name         String @unique
+  id           Int        @id() @default(autoincrement())
+  name         String     @unique
   displacement Int
   horsepower   Int
   torque       Float
+  car          CarModel[]
 
   @@map("engine")
+}
+
+model CarModel {
+  id       Int    @id() @default(autoincrement())
+  model    String
+  price    Float
+  engineId Int
+  engine   Engine @relation(fields: [engineId], references: [id])
+
+  @@map("carModel")
 }
