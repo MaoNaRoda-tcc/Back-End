@@ -1,13 +1,9 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  ValidationPipe,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CarDto } from './dto/car-dto';
 import { CarEntity } from './entities/car.entity';
 import { CarData } from './car.data';
 import { CarEngineEntity } from './entities/car.engine.entity';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class CarService {
@@ -40,30 +36,37 @@ export class CarService {
     };
   }
 
-  // async createEngine(body: EngineEntity): Promise<{ engineCreated: boolean }> {
-  //   const resp = await this.carData.insertEngine(body);
+  async createCar(body: CarDto): Promise<{ carCreated: boolean }> {
+    await validate(body);
 
-  //   return {
-  //     engineCreated: resp,
-  //   };
-  // }
+    const resp = await this.carData.createCar(body);
+    return {
+      carCreated: resp,
+    };
+  }
 
-  // async deleteEngine(id: number): Promise<{ deleteEngine: boolean }> {
-  //   const resp = await this.carData.deleteEngine(id);
+  async deleteCar(id: number): Promise<{ deleteCar: boolean }> {
+    if (id == undefined) {
+      throw new HttpException(
+        'É necessário enviar um ID',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-  //   return {
-  //     deleteEngine: resp,
-  //   };
-  // }
+    const resp = await this.carData.deleteCar(id);
 
-  // async updateEngine(
-  //   id: number,
-  //   body: EngineEntity,
-  // ): Promise<{ updateEngine: boolean }> {
-  //   const resp = await this.carData.updateEngine(id, body);
+    return {
+      deleteCar: resp,
+    };
+  }
 
-  //   return {
-  //     updateEngine: resp,
-  //   };
-  // }
+  async updateCar(id: number, body: CarDto): Promise<{ updateCar: boolean }> {
+    await validate(body);
+
+    const resp = await this.carData.updateCar(id, body);
+
+    return {
+      updateCar: resp,
+    };
+  }
 }

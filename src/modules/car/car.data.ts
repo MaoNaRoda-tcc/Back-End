@@ -2,6 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { CarEntity } from './entities/car.entity';
 import { CarEngineEntity } from './entities/car.engine.entity';
+import { EngineDto } from '../engine/dto/engine-dto';
+import { CarDto } from './dto/car-dto';
 
 @Injectable()
 export class CarData {
@@ -35,54 +37,49 @@ export class CarData {
       },
     });
 
+    if (!resp) new HttpException('Carro não encontrado!', HttpStatus.NOT_FOUND);
+
     return resp;
   }
 
-  // async insertEngine(body: EngineEntity): Promise<boolean> {
-  //   await this.prismaService.engine.create({
-  //     data: {
-  //       name: body.name,
-  //       displacement: body.displacement,
-  //       horsepower: body.horsepower,
-  //       torque: body.torque,
-  //     },
-  //   });
+  async createCar(body: CarDto): Promise<boolean> {
+    await this.prismaService.carModel.create({
+      data: {
+        model: body.model,
+        engineId: body.engineId,
+        price: body.price,
+      },
+    });
 
-  //   return true;
-  // }
+    return true;
+  }
 
-  // async deleteEngine(id: number): Promise<boolean> {
-  //   const engine = await this.prismaService.engine.findFirst({
-  //     where: { id: id },
-  //     select: { id: true },
-  //   });
+  async deleteCar(id: number): Promise<boolean> {
+    const car = await this.prismaService.carModel.findFirst({
+      where: { id: id },
+      select: { id: true },
+    });
 
-  //   if (!engine)
-  //     new HttpException(
-  //       'Motor não encontrado, não pode ser deletado',
-  //       HttpStatus.NOT_FOUND,
-  //     );
+    if (!car) new HttpException('Carro não encontrado!', HttpStatus.NOT_FOUND);
 
-  //   await this.prismaService.engine.deleteMany({
-  //     where: { id: id },
-  //   });
+    await this.prismaService.carModel.deleteMany({
+      where: { id: id },
+    });
 
-  //   return true;
-  // }
+    return true;
+  }
 
-  // async updateEngine(id: number, body: EngineEntity): Promise<boolean> {
-  //   const { name, displacement, horsepower, torque } = body;
+  async updateCar(id: number, body: CarDto): Promise<boolean> {
+    const { model, price, engineId } = body;
 
-  //   await this.prismaService.engine.update({
-  //     where: { id },
-  //     data: {
-  //       name,
-  //       displacement,
-  //       horsepower,
-  //       torque,
-  //     },
-  //   });
+    await this.prismaService.carModel.update({
+      where: { id },
+      data: {
+        model,
+        price,
+      },
+    });
 
-  //   return true;
-  // }
+    return true;
+  }
 }

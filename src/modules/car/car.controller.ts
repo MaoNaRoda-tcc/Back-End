@@ -12,6 +12,7 @@ import {
 import { CarService } from './car.service';
 import { CarEntity } from './entities/car.entity';
 import { Response } from 'express';
+import { CarDto } from './dto/car-dto';
 
 @Controller('car')
 export class CarController {
@@ -32,33 +33,33 @@ export class CarController {
     return res.status(HttpStatus.OK).send(resp);
   }
 
-  // @Post('createCar')
-  // async insertNewEngine(
-  //   @Res() res: Response,
-  //   @Body() body: CarEntity,
-  // ): Promise<Response<boolean>> {
-  //   const resp = await this.carService.createEngine(body);
-  //   return res.status(HttpStatus.OK).send(resp);
-  // }
+  @Post('createCar')
+  async createNewCar(
+    @Res() res: Response,
+    @Body() body: CarDto,
+  ): Promise<Response<boolean>> {
+    const resp = await this.carService.createCar(body);
+    return res.status(HttpStatus.OK).send(resp);
+  }
 
-  // @Delete('deleteEngine/:id')
-  // async deleteEngine(
-  //   @Param('id') id: number,
-  //   @Res() res: Response,
-  // ): Promise<Response<boolean>> {
-  //   const resp = await this.carService.deleteEngine(Number(id));
+  @Delete('deleteCar/:id')
+  async deleteEngine(
+    @Param('id') id: number,
+    @Res() res: Response,
+  ): Promise<Response<boolean>> {
+    const resp = await this.carService.deleteCar(Number(id));
 
-  //   return res.status(HttpStatus.OK).send(resp);
-  // }
+    return res.status(HttpStatus.OK).send(resp);
+  }
 
-  // @Patch('updateEngine/:id')
-  // async updateEngine(
-  //   @Param('id') id: number,
-  //   @Res() res: Response,
-  //   @Body() body: EngineEntity,
-  // ): Promise<Response<boolean>> {
-  //   const resp = await this.carService.updateEngine(Number(id), body);
+  @Patch('updateCar/:id')
+  async updateEngine(
+    @Param('id') id: number,
+    @Res() res: Response,
+    @Body() body: CarDto,
+  ): Promise<Response<boolean>> {
+    const resp = await this.carService.updateCar(Number(id), body);
 
-  //   return res.status(HttpStatus.OK).send(resp);
-  // }
+    return res.status(HttpStatus.OK).send(resp);
+  }
 }
