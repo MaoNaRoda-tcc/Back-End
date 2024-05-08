@@ -72,13 +72,21 @@ export class CarData {
   async updateCar(id: number, body: CarDto): Promise<boolean> {
     const { model, price, engineId } = body;
 
-    await this.prismaService.carModel.update({
-      where: { id },
-      data: {
-        model,
-        price,
-      },
-    });
+    try {
+      await this.prismaService.carModel.update({
+        where: { id },
+        data: {
+          model,
+          price,
+          engineId: engineId,
+        },
+      });
+    } catch {
+      throw new HttpException(
+        'Erro ao atualizar o registo',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
 
     return true;
   }
