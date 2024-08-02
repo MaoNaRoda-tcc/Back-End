@@ -16,45 +16,27 @@ export class ModelosService {
     return await this.data.createModel(input)
   }
 
-  // async findCarById(id: number): Promise<{ car: CarEntity }> {
-  //   const resp = await this.carData.findCarById(id);
+  async findModelById(id: number): Promise<ModeloEntity> {
+    return this.data.findModelById(id);
+  }
 
-  //   return {
-  //     car: resp,
-  //   };
-  // }
+  async deleteModel(id: number): Promise<boolean> {
+    if (id == undefined) {
+      throw new HttpException(
+        'É necessário enviar um ID',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-  // async createCar(body: CarDto): Promise<{ carCreated: boolean }> {
-  //   await validate(body);
+    const exists = await this.findModelById(id)
 
-  //   const resp = await this.carData.createCar(body);
-  //   return {
-  //     carCreated: resp,
-  //   };
-  // }
+    if (!exists) {
+      throw new HttpException(
+        'O modelo não existe!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-  // async deleteCar(id: number): Promise<{ deleteCar: boolean }> {
-  //   if (id == undefined) {
-  //     throw new HttpException(
-  //       'É necessário enviar um ID',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-
-  //   const resp = await this.carData.deleteCar(id);
-
-  //   return {
-  //     deleteCar: resp,
-  //   };
-  // }
-
-  // async updateCar(id: number, body: CarDto): Promise<{ updateCar: boolean }> {
-  //   await validate(body);
-
-  //   const resp = await this.carData.updateCar(id, body);
-
-  //   return {
-  //     updateCar: resp,
-  //   };
-  // }
+    return this.data.deleteModel(id)
+  }
 }
