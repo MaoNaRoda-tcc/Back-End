@@ -7,23 +7,76 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Engine {
-  id           Int        @id() @default(autoincrement())
-  name         String     @unique
-  displacement Int
-  horsepower   Int
-  torque       Float
-  car          CarModel[]
-
-  @@map("engine")
+model dm_eventos {
+  id_evento         Int         @id
+  cpf_id            Int?
+  local             String?     @db.VarChar(50)
+  data              DateTime?   @db.Date
+  horario           DateTime?   @db.Time(6)
+  descricao         String?     @db.VarChar(70)
+  recorrencia       Boolean?
+  tempo_recorrencia Int?
+  dm_usuario        dm_usuario? @relation(fields: [cpf_id], references: [cpf_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model CarModel {
-  id       Int    @id() @default(autoincrement())
-  model    String
-  price    Float
-  engineId Int
-  engine   Engine @relation(fields: [engineId], references: [id])
+model dm_mod_carro {
+  placa       String     @id @db.VarChar(7)
+  motor       String?    @db.VarChar(100)
+  freio       String?    @db.VarChar(100)
+  suspensao   String?    @db.VarChar(100)
+  cambio      String?    @db.VarChar(100)
+  interno     String?    @db.VarChar(100)
+  externo     String?    @db.VarChar(100)
+  escapamento String?    @db.VarChar(100)
+  ft_garagem  ft_garagem @relation(fields: [placa], references: [placa], onDelete: NoAction, onUpdate: NoAction)
+}
 
-  @@map("carModel")
+model dm_modelos {
+  id_modelo  Int          @id @default(autoincrement())
+  modelo     String?      @db.VarChar(80)
+  ano        DateTime?    @db.Date
+  cm_peca    cm_peca[]
+  ft_garagem ft_garagem[]
+}
+
+model dm_usuario {
+  cpf_id     Int          @id
+  nome       String?      @db.VarChar(100)
+  idade      Int?
+  email      String?      @db.VarChar(100)
+  dm_eventos dm_eventos[]
+  ft_garagem ft_garagem[]
+  publicacao publicacao[]
+}
+
+model ft_garagem {
+  cpf_id       Int?
+  placa        String        @id @db.VarChar(7)
+  id_modelo    Int?
+  dm_mod_carro dm_mod_carro?
+  dm_usuario   dm_usuario?   @relation(fields: [cpf_id], references: [cpf_id], onDelete: NoAction, onUpdate: NoAction)
+  dm_modelos   dm_modelos?   @relation(fields: [id_modelo], references: [id_modelo], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model cm_peca {
+  id_peca    Int
+  id_modelo  Int
+  dm_modelos dm_modelos @relation(fields: [id_modelo], references: [id_modelo], onDelete: NoAction, onUpdate: NoAction)
+  dm_peca    dm_peca    @relation(fields: [id_peca], references: [id_peca], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([id_peca, id_modelo])
+}
+
+model dm_peca {
+  id_peca Int       @id
+  peca    String?   @db.VarChar(80)
+  cm_peca cm_peca[]
+}
+
+model publicacao {
+  id_publicacao Int         @id
+  cpf_id        Int?
+  qtd_curtidas  Int?
+  link_foto     String?     @db.VarChar(100)
+  dm_usuario    dm_usuario? @relation(fields: [cpf_id], references: [cpf_id], onDelete: NoAction, onUpdate: NoAction)
 }

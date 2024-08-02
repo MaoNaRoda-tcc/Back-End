@@ -1,24 +1,19 @@
 import {
+  IsDate,
   IsNotEmpty,
-  IsNumber,
   IsString,
   MaxLength,
-  Min,
   MinLength,
 } from 'class-validator';
 
-export class CarDto {
+export class ModeloDto {
   @IsString()
   @MinLength(2)
   @MaxLength(40)
-  model: string;
-
-  @IsNumber()
-  @Min(1)
   @IsNotEmpty()
-  price: number;
+  modelo: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  engineId: number;
+  ano: Date;
 }
