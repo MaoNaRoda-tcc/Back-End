@@ -5,7 +5,6 @@ import {
   Get,
   HttpStatus,
   Param,
-  Patch,
   Post,
   Res,
 } from '@nestjs/common';
@@ -33,33 +32,22 @@ export class ModelosController {
     return res.status(HttpStatus.OK).send(resp);
   }
 
-  // @Get(':id')
-  // async findCarById(
-  //   @Param('id') id: number,
-  //   @Res() res: Response,
-  // ): Promise<Response<CarEntity>> {
-  //   const resp = await this.carService.findCarById(Number(id));
-  //   return res.status(HttpStatus.OK).send(resp);
-  // }
+  @Get(':id')
+  async findModelById(
+    @Param('id') id: number,
+    @Res() res: Response,
+  ): Promise<Response<ModeloEntity>> {
+    const resp = await this.service.findModelById(Number(id));
+    return res.status(HttpStatus.OK).send(resp);
+  }
 
-  // @Delete('deleteCar/:id')
-  // async deleteEngine(
-  //   @Param('id') id: number,
-  //   @Res() res: Response,
-  // ): Promise<Response<boolean>> {
-  //   const resp = await this.carService.deleteCar(Number(id));
+  @Delete(':id')
+  async deleteModel(
+    @Param('id') id: number,
+    @Res() res: Response,
+  ): Promise<Response<boolean>> {
+    const resp = await this.service.deleteModel(Number(id));
 
-  //   return res.status(HttpStatus.OK).send(resp);
-  // }
-
-  // @Patch('updateCar/:id')
-  // async updateEngine(
-  //   @Param('id') id: number,
-  //   @Res() res: Response,
-  //   @Body() body: CarDto,
-  // ): Promise<Response<boolean>> {
-  //   const resp = await this.carService.updateCar(Number(id), body);
-
-  //   return res.status(HttpStatus.OK).send(resp);
-  // }
+    return res.status(HttpStatus.OK).send(resp);
+  }
 }

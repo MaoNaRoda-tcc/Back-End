@@ -28,4 +28,27 @@ export class ModelosData {
       }
     })
   }
+
+  async findModelById(id: number): Promise<ModeloEntity> {
+    return this.prismaService.dm_modelos.findFirst({
+      select: {
+        id_modelo: true,
+        modelo: true,
+        ano: true
+      },
+      where: {
+        id_modelo: id
+      }
+    })
+  }
+
+  async deleteModel(id: number): Promise<boolean> {
+    const data = await this.prismaService.dm_modelos.delete({
+      where: {
+        id_modelo: id
+      }
+    })
+
+    return !!data
+  }
 }
