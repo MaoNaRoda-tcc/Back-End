@@ -8,8 +8,8 @@ datasource db {
 }
 
 model dm_eventos {
-  id_evento         Int         @id
-  cpf_id            Int?
+  id_evento         Int         @id @default(autoincrement())
+  cpf_id            String?     @db.VarChar(11)
   local             String?     @db.VarChar(50)
   data              DateTime?   @db.Date
   horario           DateTime?   @db.Time(6)
@@ -20,7 +20,7 @@ model dm_eventos {
 }
 
 model dm_mod_carro {
-  placa       String     @id @db.VarChar(7)
+  placa       String     @id @db.VarChar(8)
   motor       String?    @db.VarChar(100)
   freio       String?    @db.VarChar(100)
   suspensao   String?    @db.VarChar(100)
@@ -40,7 +40,7 @@ model dm_modelos {
 }
 
 model dm_usuario {
-  cpf_id     Int          @id
+  cpf_id     String       @id @db.VarChar(11)
   nome       String?      @db.VarChar(100)
   idade      Int?
   email      String?      @db.VarChar(100)
@@ -50,8 +50,8 @@ model dm_usuario {
 }
 
 model ft_garagem {
-  cpf_id       Int?
-  placa        String        @id @db.VarChar(7)
+  cpf_id       String?       @db.VarChar(11)
+  placa        String        @id @db.VarChar(8)
   id_modelo    Int?
   dm_mod_carro dm_mod_carro?
   dm_usuario   dm_usuario?   @relation(fields: [cpf_id], references: [cpf_id], onDelete: NoAction, onUpdate: NoAction)
@@ -68,14 +68,14 @@ model cm_peca {
 }
 
 model dm_peca {
-  id_peca Int       @id
+  id_peca Int       @id @default(autoincrement())
   peca    String?   @db.VarChar(80)
   cm_peca cm_peca[]
 }
 
 model publicacao {
-  id_publicacao Int         @id
-  cpf_id        Int?
+  id_publicacao Int         @id @default(autoincrement())
+  cpf_id        String?     @db.VarChar(11)
   qtd_curtidas  Int?
   link_foto     String?     @db.VarChar(100)
   dm_usuario    dm_usuario? @relation(fields: [cpf_id], references: [cpf_id], onDelete: NoAction, onUpdate: NoAction)
