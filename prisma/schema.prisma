@@ -74,9 +74,10 @@ model dm_peca {
 }
 
 model publicacao {
-  id_publicacao Int         @id @default(autoincrement())
-  cpf_id        String?     @db.VarChar(11)
+  id_publicacao Int        @id @default(autoincrement())
+  cpf_id        String     @db.VarChar(11)
   qtd_curtidas  Int?
-  link_foto     String?     @db.VarChar(100)
-  dm_usuario    dm_usuario? @relation(fields: [cpf_id], references: [cpf_id], onDelete: NoAction, onUpdate: NoAction)
+  link_foto     String     @db.VarChar(100)
+  titulo        String     @db.VarChar(50)
+  dm_usuario    dm_usuario @relation(fields: [cpf_id], references: [cpf_id], onDelete: NoAction, onUpdate: NoAction)
 }
