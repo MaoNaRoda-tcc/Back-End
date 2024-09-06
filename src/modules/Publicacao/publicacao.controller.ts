@@ -12,7 +12,7 @@ import {
 import { PublicacaoService } from './publicacao.service';
 import { Response } from 'express';
 import { PublicacaoDto } from './dto/publicacao-dto';
-import { GaragemEntity } from './entities/garagem.entity';
+import { PublicacaoEntity } from './entities/publicacao.entity';
 
 @Controller('publicacao')
 export class PublicacaoController {
@@ -32,19 +32,18 @@ export class PublicacaoController {
     @Query('skip') skip: number = 0,
     @Query('take') take: number = 10,
     @Res() res: Response,
-  ): Promise<Response<any[]>> {
-    const resp = await this.service.findAllPublications(skip, take);
+  ): Promise<Response<PublicacaoEntity[]>> {
+    const resp = await this.service.findAllPublications(Number(skip), Number(take));
     return res.status(HttpStatus.OK).send(resp);
   }
 
-  // @Delete(':cpf/:placa')
-  // async deleteModel(
-  //   @Param('cpf') cpf: string,
-  //   @Param('placa') placa: string,
-  //   @Res() res: Response,
-  // ): Promise<Response<boolean>> {
-  //   const resp = await this.service.deleteCarFromGarage(placa, cpf);
+  @Delete(':id')
+  async deleteModel(
+    @Param('id') id: number,
+    @Res() res: Response,
+  ): Promise<Response<boolean>> {
+    const resp = await this.service.deletePublication(Number(id));
 
-  //   return res.status(HttpStatus.OK).send(resp);
-  // }
+    return res.status(HttpStatus.OK).send(resp);
+  }
 }

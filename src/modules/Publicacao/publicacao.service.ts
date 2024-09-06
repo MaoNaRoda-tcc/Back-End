@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { GaragemEntity } from './entities/garagem.entity';
+import { PublicacaoEntity } from './entities/publicacao.entity';
 import { PublicacaoData } from './publicacao.data';
 import { PublicacaoDto } from './dto/publicacao-dto';
 
@@ -7,25 +7,25 @@ import { PublicacaoDto } from './dto/publicacao-dto';
 export class PublicacaoService {
   constructor(private readonly data: PublicacaoData) { }
 
-  async findAllPublications(skip: number, take: number): Promise<Partial<any>[]> {
-    return await this.data.findAllPublications({skip, take})
+  async findAllPublications(skip: number, take: number): Promise<Partial<PublicacaoEntity>[]> {
+    return await this.data.findAllPublications({ skip, take })
   }
 
   async createPublication(input: PublicacaoDto): Promise<boolean> {
     return this.data.createPublication(input)
   }
 
-  // async deleteCarFromGarage(placa: string, cpf: string): Promise<boolean> {
+  async deletePublication(id: number): Promise<boolean> {
 
-  //   const exists = await this.findCarByCpfAndPlate(placa, cpf)
+    const exists = await this.data.findPublication(id)
 
-  //   if (!exists) {
-  //     throw new HttpException(
-  //       'O registro não existe!',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
+    if (!exists) {
+      throw new HttpException(
+        'O registro não existe!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-  //   return this.data.deleteCarFromGarage(placa)
-  // }
+    return this.data.deletePublication(id)
+  }
 }
