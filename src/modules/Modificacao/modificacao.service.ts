@@ -7,17 +7,22 @@ import { ModificacaoDto } from './dto/modificacao-dto';
 export class ModificacaoService {
   constructor(private readonly data: ModificacaoData) { }
 
-  async findAllPublications(skip: number, take: number): Promise<Partial<ModificacaoEntity>[]> {
-    return await this.data.findAllPublications({ skip, take })
+  async create(input: ModificacaoDto): Promise<boolean> {
+    return this.data.createModification(input)
   }
 
-  async createPublication(input: ModificacaoDto): Promise<boolean> {
-    return this.data.createPublication(input)
+  async update(input: ModificacaoDto): Promise<boolean> {
+    return this.data.updateModification(input)
   }
 
-  async deletePublication(id: number): Promise<boolean> {
+  async find(placa: string): Promise<Partial<ModificacaoEntity>> {
 
-    const exists = await this.data.findPublication(id)
+    return this.data.findModification(placa)
+  }
+
+  async delete(placa: string): Promise<boolean> {
+
+    const exists = await this.data.findModification(placa)
 
     if (!exists) {
       throw new HttpException(
@@ -26,6 +31,6 @@ export class ModificacaoService {
       );
     }
 
-    return this.data.deletePublication(id)
+    return this.data.deleteModification(placa)
   }
 }

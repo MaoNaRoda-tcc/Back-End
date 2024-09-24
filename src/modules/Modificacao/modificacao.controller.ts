@@ -5,8 +5,8 @@ import {
   Get,
   HttpStatus,
   Param,
+  Patch,
   Post,
-  Query,
   Res,
 } from '@nestjs/common';
 import { ModificacaoService } from './modificacao.service';
@@ -19,31 +19,39 @@ export class ModificacaoController {
   constructor(private readonly service: ModificacaoService) { }
 
   @Post()
-  async createPublication(
+  async create(
     @Res() res: Response,
     @Body() body: ModificacaoDto,
   ): Promise<Response<boolean>> {
-    const resp = await this.service.createPublication(body);
+    const resp = await this.service.create(body);
     return res.status(HttpStatus.OK).send(resp);
   }
 
-  @Get()
-  async findAllPublications(
-    @Query('skip') skip: number = 0,
-    @Query('take') take: number = 10,
+  @Get(':placa')
+  async find(
+    @Param('placa') placa: string,
     @Res() res: Response,
-  ): Promise<Response<ModificacaoEntity[]>> {
-    const resp = await this.service.findAllPublications(Number(skip), Number(take));
+  ): Promise<Response<ModificacaoEntity>> {
+    const resp = await this.service.find(placa);
     return res.status(HttpStatus.OK).send(resp);
   }
 
-  @Delete(':id')
-  async deleteModel(
-    @Param('id') id: number,
+  @Delete(':placa')
+  async delete(
+    @Param('placa') placa: string,
     @Res() res: Response,
   ): Promise<Response<boolean>> {
-    const resp = await this.service.deletePublication(Number(id));
+    const resp = await this.service.delete(placa);
 
+    return res.status(HttpStatus.OK).send(resp);
+  }
+
+  @Patch()
+  async update(
+    @Res() res: Response,
+    @Body() body: ModificacaoDto,
+  ): Promise<Response<boolean>> {
+    const resp = await this.service.update(body);
     return res.status(HttpStatus.OK).send(resp);
   }
 }
