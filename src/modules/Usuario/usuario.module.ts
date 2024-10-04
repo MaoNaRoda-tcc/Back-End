@@ -10,4 +10,4 @@ import { DatabaseModule } from 'src/database/database.module';
   providers: [UsuarioService, UsuarioData],
   imports: [DatabaseModule],
 })
-export class ModificacaoModule { }
+export class UsuarioModule { }
